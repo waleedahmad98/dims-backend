@@ -18,23 +18,17 @@ router.get("/getKey/:address", async (req, res) => {
 
 router.post("/share", async (req, res) => {
     const resp = await putVerifiableCredential(req.body.sender, req.body.txid, req.body.signature, req.body.rcvr);
-    console.log(resp);
     res.send(resp);
 })
 
-router.get("/docverifables", async (req, res) => {
+router.get("/sharedDocs/:address", async (req, res) => {
     const resp = await getVerifiableCredentials(req.params["address"]);
     res.send(resp);
 })
 
 router.get("/docs/:address", async (req, res) => {
-    const resp = await getAllVerifiableCredentials(req.params["address"]);
+    const resp = await getAllVerifiableCredentials(req.params["address"]);  
     res.send(resp);
-})
-
-router.get("/ufdocs", async (req, res) => {
-    const resp = await getAllUnverified();
-    res.send(resp)
 })
 
 router.delete("/docs", async (req, res) => {

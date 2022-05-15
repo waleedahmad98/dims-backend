@@ -63,7 +63,8 @@ const putVerifiableCredential = async (sender, txid, signature, rcvr) => {
 }
 
 const getVerifiableCredentials = async (address) => {
-	const vc = await verifiableCredential.findOne({ sharedWith: address })
+	console.log(address)
+	const vc = await verifiableCredential.find({ sharedWith: address })
 	if (vc !== null)
 		return { "code": 1, "message": "success", "vc": vc }
 	else
@@ -81,11 +82,6 @@ const getAllVerifiableCredentials = async (address) => {
 
 const deleteVerifiableCredential = async (objectid) => {
 	await verifiableCredential.deleteOne({ _id: objectid })
-}
-
-const getAllUnverified = async () => {
-	const uvc = await verifiableCredential.find();
-	return uvc;
 }
 
 const verifyCred = async (id) => {
@@ -110,4 +106,4 @@ const getPrevVerifiedCred = async () => {
 	return vc;
 }
 
-module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, getAllUnverified, verifyCred, getPrevVerifiedCred }
+module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, verifyCred, getPrevVerifiedCred }
