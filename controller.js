@@ -80,7 +80,6 @@ const putVerifiedCredential = async (sender, txid, signature, rcvr, result) => {
 }
 
 const getVerifiableCredentials = async (address) => {
-	console.log(address)
 	const vc = await verifiableCredential.find({ sharedWith: address })
 	if (vc !== null)
 		return { "code": 1, "message": "success", "vc": vc }
@@ -89,8 +88,12 @@ const getVerifiableCredentials = async (address) => {
 
 }
 
-const getAllVerifiableCredentials = async (address) => {
+const getAllVerifiableCredentials = async (address) => { //gets both verifial and verified
 	const vc = await verifiableCredential.find({ senderAddress: address })
+	const hist_vc = await verifiedCredential.find({ senderAddress: address })
+	for (let i=0; i<hist_vc.length; i++){
+		vc.push(hist_vc[i]);
+	}
 	if (vc !== null)
 		return { "code": 1, "message": "success", "vc": vc }
 	else
@@ -101,26 +104,10 @@ const deleteVerifiableCredential = async (objectid) => {
 	await verifiableCredential.deleteOne({ _id: objectid })
 }
 
-const verifyCred = async (id) => {
-	try {
-		const vc = await verifiableCredential.findOne({ _id: id });
-		await verifiableCredential.deleteOne({ _id: id });
-		const object = new verifiedCredential({
-			senderAddress: vc.sender, txid: vc.txid, signature: vc.signature, sharedWith: vc.rcvr
-		})
-		await object.save()
-		return { "code": 1, "message": "success" }
-	}
-	catch (e){
-		console.log(e)
-		return { "code": -1, "message": "error" }
-	}
-
-}
-
-const getPrevVerifiedCred = async () => {
-	const vc = await verifiedCredential.find();
+const getPrevVerifiedCred = async (sharedWith) => {
+	console.log("test",sharedWith)
+	const vc = await verifiedCredential.find({sharedWith: sharedWith});
 	return vc;
 }
 
-module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, verifyCred, getPrevVerifiedCred, putVerifiedCredential }
+module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, getPrevVerifiedCred, putVerifiedCredential }
