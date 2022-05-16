@@ -62,6 +62,23 @@ const putVerifiableCredential = async (sender, txid, signature, rcvr) => {
 	}
 }
 
+const putVerifiedCredential = async (sender, txid, signature, rcvr, result) => {
+	try {
+		const checkExist = await verifiedCredential.exists({ senderAddress: sender, txid: txid, signature: signature, sharedWith: rcvr, result: result });
+		if (!checkExist) {
+			const object = new verifiedCredential({
+				senderAddress: sender, txid: txid, signature: signature, sharedWith: rcvr, result: result
+			})
+			await object.save()
+		}
+		return { "code": 1, "message": "success" }
+	}
+	catch (e) {
+		console.log(e)
+		return { "code": -1, "message": "save error" }
+	}
+}
+
 const getVerifiableCredentials = async (address) => {
 	console.log(address)
 	const vc = await verifiableCredential.find({ sharedWith: address })
@@ -106,4 +123,4 @@ const getPrevVerifiedCred = async () => {
 	return vc;
 }
 
-module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, verifyCred, getPrevVerifiedCred }
+module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, verifyCred, getPrevVerifiedCred, putVerifiedCredential }

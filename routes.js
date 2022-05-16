@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const {saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, getAllUnverified} = require("./controller")
+const {saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, putVerifiedCredential} = require("./controller")
 
 router.post("/save", async (req, res) => {
     const resp = await saveKey(req.body.stxAddress, req.body.publicKey)
@@ -18,6 +18,11 @@ router.get("/getKey/:address", async (req, res) => {
 
 router.post("/share", async (req, res) => {
     const resp = await putVerifiableCredential(req.body.sender, req.body.txid, req.body.signature, req.body.rcvr);
+    res.send(resp);
+})
+
+router.post("/move", async (req, res) => {
+    const resp = await putVerifiedCredential(req.body.sender, req.body.txid, req.body.signature, req.body.rcvr, req.body.result);
     res.send(resp);
 })
 
