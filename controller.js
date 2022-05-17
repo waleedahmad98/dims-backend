@@ -104,10 +104,13 @@ const deleteVerifiableCredential = async (objectid) => {
 	await verifiableCredential.deleteOne({ _id: objectid })
 }
 
+const deleteVerifiedCredential = async (objectid) => {
+	await verifiedCredential.deleteOne({ _id: objectid })
+}
+
 const getPrevVerifiedCred = async (sharedWith) => {
-	console.log("test",sharedWith)
 	const vc = await verifiedCredential.find({sharedWith: sharedWith});
 	return vc;
 }
 
-module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, getPrevVerifiedCred, putVerifiedCredential }
+module.exports = { saveKey, getKey, putVerifiableCredential, getVerifiableCredentials, getAllVerifiableCredentials, deleteVerifiableCredential, getPrevVerifiedCred, putVerifiedCredential, deleteVerifiedCredential }
