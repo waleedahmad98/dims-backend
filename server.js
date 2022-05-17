@@ -1,11 +1,13 @@
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require('express')
 var cors = require('cors')
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose")
 const routes = require("./routes") // new
-
+const port = process.env.PORT || 8000;
 mongoose
-	.connect(`mongodb+srv://DIMSBackend:sRWy0dZPqrLALeGA@dims.0o9s1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true })
+	.connect(process.env.MONGO_URL, { useNewUrlParser: true })
 	.then(() => {
 		const app = express()
 		app.use(cors())
@@ -13,7 +15,7 @@ mongoose
 		app.use(bodyParser.json())
 		app.use("/api", routes) // new
 
-		app.listen(process.env.PORT || 3000, () => {
+		app.listen(port, () => {
 			console.log(`Server has started on port ${port}`)
 		})
 	})
