@@ -10,7 +10,10 @@ mongoose
 	.connect(process.env.MONGO_URL, { useNewUrlParser: true })
 	.then(() => {
 		const app = express()
-		app.use(cors())
+		app.use(cors({
+			origin: ['https://dims-issuer.herokuapp.com/', 'https://dims-holder.herokuapp.com/', 'https://dims-verifier.herokuapp.com/' , "http://203.101.178.74"]
+		}))
+		//app.use(cors())
 		app.use(bodyParser.urlencoded({ extended: false }))
 		app.use(bodyParser.json())
 		app.use("/api", routes) // new
